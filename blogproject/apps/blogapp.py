@@ -22,6 +22,8 @@ Migrate(app,db)
 from sqlalchemy import select  # sqlalchemy.select()
 from apps import models  # apps.modelsモジュール
 from flask import render_template
+from flask import request  # flask.request
+from flask_paginate import Pagination, get_page_parameter
 
 @app.route('/')
 def index():
@@ -30,9 +32,23 @@ def index():
         models.Blogpost).order_by(models.Blogpost.id.desc())
     # データベースにクエリを発行
     entries = db.session.execute(stmt).scalars().all()
-    # index.htmlのレンダリングをする際にrowsオプションで
-    # レコードのデータを引き渡す
-    return render_template('index.html', rows=entries)
+
+    # 現在のページ番号を取得
+    page = request.args.get(
+        get_page_parameter(), type=int, default=1)
+    # entriesから、現在のページに表示するレコードを抽出
+    res = entries[(page - 1)*3: page*3]
+    # Paginationオブジェクトを生成
+    pagination = Pagination(
+        page=page,             # 現在のページ
+        total=len(entries),    # 全レコード数を取得
+        per_page=3)            # 1ページあたりのレコード数
+
+    # index.htmlのレンダリングをする際にrowsオプションでレコードデータres、
+    # paginationオプションでPaginationオブジェクトを引き渡す
+    return render_template(
+        'index.html',
+        rows=res, pagination=pagination)
 
 """
 ブループリントの登録
