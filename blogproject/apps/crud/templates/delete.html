@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSSのリンク先を設定 -->
+    <link
+        href="{{ url_for('crud.static', filename='/style.css') }}"
+        rel="stylesheet" />
+</head>
+
+<body>
+    <div class="pad">
+        <h2>投稿記事の削除</h2>
+        <p>
+            削除する記事の[削除]をクリックしてください。
+        </p>
+        <!-- 削除ページログイン画面へのリンク -->
+        <a href="{{ url_for('crud.login_del') }}">削除をやめる</a>
+        <br><br>
+        <!-- テーブルを配置 -->
+        <table>
+            <tr>
+                <th>id</th>
+                <th>タイトル</th>
+                <th>削除</th>
+            </tr>
+            <!-- レコードを1件ずつ取り出す -->
+            {% for entry in entries %}
+            <tr>
+                <!-- idを表示 -->
+                <td>{{entry.id}}</td>
+                <!-- タイトルを表示 -->
+                <td>{{entry.title}}</td>
+                <td>
+                    <!-- deleteビューへのリンク
+                        処理中のレコードのidを引き渡す -->
+    <a href="{{ url_for('crud.delete', id=entry.id )}}">削除</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>
