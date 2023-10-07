@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSSのリンク先を設定 -->
+    <link
+        href="{{ url_for('crud.static', filename='/style.css') }}"
+        rel="stylesheet" />
+</head>
+
+<body>
+    <div class="pad">
+        <h3>投稿記事の削除ページにログイン</h3>
+        <!-- フォームを配置
+            バリデーションはflask_wtfで行うので
+            novalidateを設定してHTMLのバリデーションを無効にする -->
+        <form
+            action="{{url_for('crud.login_del')}}"
+            method="POST"
+            novalidate="novalidate">
+            <!-- CSRF対策機能を有効にする -->
+            {{form.csrf_token}}
+            <p>
+                <!-- usernameに設定されているラベルを表示 -->
+                {{form.username.label}}
+                <!-- usernameの入力欄を配置-->
+                {{form.username(placeholder="ユーザー名")}}
+
+                <!-- バリデーションにおけるエラーメッセージを抽出し、出力する -->
+                {% for error in form.username.errors %}
+                <span style="color:red">{{ error }}</span>
+                {% endfor %}
+            </p>
+            <p>
+                <!-- passwordに設定されているラベルを表示 -->
+                {{form.password.label}}
+                <!-- passwordの入力欄を配置 -->
+                {{form.password(placeholder="パスワード")}}
+
+                <!-- バリデーションにおけるエラーメッセージを抽出し、出力する -->
+                {% for error in form.password.errors %}
+                <span style="color:red">{{ error }}</span>
+                {% endfor %}
+            </p>
+            <p>
+                <!-- 送信ボタンを配置 -->
+                {{form.submit()}}
+            </p>
+        </form>
+    </div>
+</body>
+
+</html>
