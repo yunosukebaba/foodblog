@@ -41,7 +41,9 @@
                     {% for entry in rows %}
                     <!-- Post preview -->
                     <div class="post-preview">
-                        <a href="post.html">
+                        <!-- show_entryビューへのリンク 
+                                id=entry.idでレコードのidを引き渡す -->
+                        <a href="{{url_for('show_entry', id=entry.id)}}">
                             <!-- titleフィールドを入力 -->
                             <h2 class="post-title">{{entry.title}}</h2>
                             <!-- contentsフィールドを出力:出力文字数を80字以内に制限 -->

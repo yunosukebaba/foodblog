@@ -1,0 +1,57 @@
+<!-- ベーステンプレートを適用する -->
+{% extends 'base.html' %}
+
+<!-- ヘッダー情報のページタイトルは
+    ベーステンプレートを利用するページで設定する -->
+{% block title %}Flask Blog{% endblock %}
+
+<!-- <header> 〜 </header> をテンプレートタグで囲む -->
+{% block header %}
+<!-- 背景画像のリンク先を設定 -->
+        <header class="masthead" style="background-image: url('/static/assets/img/post-bg.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <!-- 投稿記事のタイトル
+                                レコードをentryで参照し、titleフィールドの値を出力 -->
+                            <h1>{{ entry.title }}</h1>
+                            <!-- サブタイトル
+                                レコードをentryで参照し、
+                                contentsフィールドの値を30文字以内で出力 -->
+                            <h2 class="subheading">
+                                {{ entry.contents|truncate(30)}}</h2>
+                            <span class="meta">
+                                <!-- トップページへのリンク -->
+                                <a href="{{ url_for('index') }}">Flask Blog</a>
+                                <!-- 投稿日時としてcreate_atフィールドを出力 -->
+                                {{ entry.create_at }}に投稿
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+<!-- テンプレートタグの終了 -->
+{% endblock %}
+
+<!-- Main Content-->
+<!-- コンテンツを設定する<article> 〜 </article>をテンプレートタグで囲む -->
+{% block contents %}
+<!-- <article> 〜 </article>を追加 -->
+<article class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7176">
+                <!-- 以下<div>タグの要素を書き換える
+                    レコードをentryで参照し、contentsフィールドの値を出力
+                    <p>〜</p>の要素とすることで全体を１つの段落にする -->
+                <p>{{entry.contents}}</p>
+            </div>
+        </div>
+    </div>
+</article>
+<!-- 水平線を追加 -->
+<hr>
+<!-- テンプレートタグの終了 -->
+{% endblock %}

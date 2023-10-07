@@ -51,6 +51,17 @@ def index():
         rows=res, pagination=pagination)
 
 """
+詳細ページのルーティング
+"""
+@app.route('/entries/<int:id>')
+def show_entry(id):
+    # データベーステーブルから指定されたidのレコードを抽出
+    entry = db.session.get(models.Blogpost, id)
+    # 抽出したレコードをentry=entryに格納して
+    # post.htmlをレンダリングする
+    return render_template('post.html', entry=entry)
+
+"""
 ブループリントの登録
 """
 # crudアプリのモジュールviews.pyからBlueprint[crud]をインポート
