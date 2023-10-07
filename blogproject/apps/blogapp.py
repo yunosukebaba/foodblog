@@ -19,12 +19,20 @@ from flask_migrate import Migrate
 Migrate(app,db)
 
 # トップページのルーティング
+from sqlalchemy import select  # sqlalchemy.select()
+from apps import models  # apps.modelsモジュール
 from flask import render_template
 
 @app.route('/')
 def index():
-    # index.htmlをレンダリングして返す
-    return render_template('index.html')
+    # 投稿記事のレコードをidの降順で全件取得するクエリ
+    stmt = select(
+        models.Blogpost).order_by(models.Blogpost.id.desc())
+    # データベースにクエリを発行
+    entries = db.session.execute(stmt).scalars().all()
+    # index.htmlのレンダリングをする際にrowsオプションで
+    # レコードのデータを引き渡す
+    return render_template('index.html', rows=entries)
 
 """
 ブループリントの登録
