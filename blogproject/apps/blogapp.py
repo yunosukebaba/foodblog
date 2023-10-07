@@ -22,7 +22,7 @@ Migrate(app,db)
 from sqlalchemy import select  # sqlalchemy.select()
 from apps import models  # apps.modelsモジュール
 from flask import render_template
-from flask import request  # flask.request
+from flask import request
 from flask_paginate import Pagination, get_page_parameter
 
 @app.route('/')
@@ -36,13 +36,13 @@ def index():
     # 現在のページ番号を取得
     page = request.args.get(
         get_page_parameter(), type=int, default=1)
-    # entriesから、現在のページに表示するレコードを抽出
+    # entriesから現在のページに表示するレコードを抽出
     res = entries[(page - 1)*3: page*3]
     # Paginationオブジェクトを生成
     pagination = Pagination(
-        page=page,             # 現在のページ
-        total=len(entries),    # 全レコード数を取得
-        per_page=3)            # 1ページあたりのレコード数
+        page=page,
+        total=len(entries),
+        per_page=3)
 
     # index.htmlのレンダリングをする際にrowsオプションでレコードデータres、
     # paginationオプションでPaginationオブジェクトを引き渡す
