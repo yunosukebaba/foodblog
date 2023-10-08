@@ -80,6 +80,19 @@ def contact():
         email = form.email.data
         message = form.message.data
         # メール送信
+        send_mail(
+            # 送信されたメールを受信するアドレス
+            # Gmailで受信sる
+            to='yunosuke.baba1104@gmail.com',
+            # メールの表題
+            subject="問い合わせページからのメッセージ",
+            # templates/send_mail.txtをテンプレートに指定
+            template="send_mail.txt",
+            # ユーザー名、メールアドレス、メッセージ
+            username=username,
+            email=email,
+            message=message
+            )
         # フラッシュメッセージを表示
         flash('お問い合わせの内容は送信されました。')
         # 問い合わせ完了ページへ、リダイレクト
@@ -94,6 +107,31 @@ def contact():
 def contact_complete():
     # 問い合わせページをレンダリング
     return render_template('contact_complete.html')
+
+"""flaskインスタンスをmailオブジェクトに登録
+"""
+from flask_mail import Mail
+mail = Mail(app)
+
+from flask_mail import Message
+def send_mail(to, subject, template, **kwargs):
+    """メールを送信する
+    
+    Args:
+        to: Mailの送信先
+        subject: メールの表題
+        template: メール本文に適用するテンプレート
+        **kwargs: 複数のキーワード引数を辞書として受け取る
+    """
+    # Messageオブジェクトを生成
+    # 表題を第1引数、送信先をrecipientsオプションで指定
+    msg = Message(subject, recipients=[to])
+    # メール本文のテンプレートをレンダリングして
+    # メッセージボディmsg.bodyに格納
+    msg.body = render_template(template, **kwargs)
+    # メールの送信
+    # msgを引数にしてMailオブジェクトからsend()メソッドを実行
+    mail.send(msg)
 
 
 """
