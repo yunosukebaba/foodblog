@@ -105,7 +105,7 @@ def contact():
 """
 @app.route('/contact_complete')
 def contact_complete():
-    # 問い合わせページをレンダリング
+    # 問い合わせ完了ページをレンダリング
     return render_template('contact_complete.html')
 
 """flaskインスタンスをmailオブジェクトに登録

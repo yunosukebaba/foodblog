@@ -8,7 +8,7 @@
         <!-- Page Header-->
         <!-- テンプレートタグで囲む -->
         {% block header %}
-        <header class="masthead" style="background-image: url('assets/img/contact-bg.jpg')">
+        <header class="masthead" style="background-image: url('static/assets/img/contact-bg.jpg')">
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
@@ -36,10 +36,10 @@
                             <h2>問い合わせが完了しました</h2>
                         </div>
                         <!-- 送信完了時のフラッシュメッセージを出力 -->
-                        {% with message = get_flashed_message() %}
-                        {% if message %}
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
                         <ul>
-                            {% for message in message %}
+                            {% for message in messages %}
                             <li class="flash">{{ message }}</li>
                             {% endfor %}
                         </ul>
