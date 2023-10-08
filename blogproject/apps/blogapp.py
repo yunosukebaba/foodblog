@@ -68,7 +68,7 @@ def show_entry(id):
 """
 from flask import url_for, redirect   # url_for、redirect
 from flask import flash   # flash
-from flask import forms   # apps/forms.py
+from apps import forms   # apps/forms.py
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
