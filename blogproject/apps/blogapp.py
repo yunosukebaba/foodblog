@@ -61,6 +61,41 @@ def show_entry(id):
     # post.htmlをレンダリングする
     return render_template('post.html', entry=entry)
 
+
+"""
+問い合わせページのルーティングとビューの定義
+フォームデータをメール送信する
+"""
+from flask import url_for, redirect   # url_for、redirect
+from flask import flash   # flash
+from flask import forms   # apps/forms.py
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    # InquiryFormをインスタンス化
+    form = forms.InquiryForm()
+    if form.validate_on_submit():
+        # フォームの入力データを取得
+        username = form.username.data
+        email = form.email.data
+        message = form.message.data
+        # メール送信
+        # フラッシュメッセージを表示
+        flash('お問い合わせの内容は送信されました。')
+        # 問い合わせ完了ページへ、リダイレクト
+        return redirect(url_for("contact_complete"))
+    
+    # 問い合わせページをレンダリング
+    return render_template('contact.html', form=form)
+
+"""問い合わせ完了ページのルーティングとビューの定義
+"""
+@app.route('/contact_complete')
+def contact_complete():
+    # 問い合わせページをレンダリング
+    return render_template('contact_complete.html')
+
+
 """
 ブループリントの登録
 """
