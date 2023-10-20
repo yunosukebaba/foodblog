@@ -8,6 +8,7 @@ app = Flask(__name__)
 # 設定ファイルを読み込む
 app.config.from_pyfile('settings.py')
 
+
 """SQLAlchemyの登録
 """
 # SQLAlchemyのインスタンスを生成
@@ -16,12 +17,28 @@ db = SQLAlchemy()
 # SQLAlchemyオブジェクトにflaskオブジェクトを登録する
 db.init_app(app)
 
+
 """Migrateの登録
 """
 # Migrateオブジェクトを生成して、
 # FlaskオブジェクトとSQLAlchemyオブジェクトを登録する
 from flask_migrate import Migrate
 Migrate(app, db)
+
+
+"""LoginManagerの登録
+"""
+from flask_login import LoginManager
+
+# LoginManagerのインスタンスを生成
+login_manager = LoginManager()
+#未ログイン時にリダイレクトするエンドポイントを設定
+login_manager.login_view = 'index'
+# ログインしたときのメッセージを設定
+login_manager.login_message = ''
+# LoginManagerをアプリに登録する
+login_manager.init_app(app)
+
 
 """トップページのルーティング
 """
@@ -62,3 +79,13 @@ def index():
     # トップページへのアクセスは、index.htmlをレンダリングして
     # SignupFormのインスタンスformを引き渡す
     return render_template('index.html', form=form)
+
+
+"""Blueprint「authapp」の登録
+"""
+# authappのモジュールviews.pyからBlueprint「authapp」をインポート
+from apps.authapp.views import authapp
+
+# FlaskオブジェクトにBlueprint「authapp」を登録
+# URLのプレフィクスを/authにする
+app.register_blueprint(authapp, url_prefix='/auth')

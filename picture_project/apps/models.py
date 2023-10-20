@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # flask_loginからUserMixinクラスをインポート
 from flask_login import UserMixin
 # app.pyからSQLAlchemyのインスタンスdbをインポート
-from apps.app import db
+from apps.app import db, login_manager
 
 
 class User(db.Model, UserMixin):
@@ -74,3 +74,32 @@ class User(db.Model, UserMixin):
         # データベースから、「emailカラムの内容がサインアップフォームで入力されたメールアドレスと一致するレコードを取得」
         # 該当するレコードが取得された場合はTrueを返し、取得できない場合はFalseを返す
         return User.query.filter_by(email=self.email).first() is not None
+    
+    def verify_password(self, password):
+        """パスワードの照合を行う
+        
+        indexビューでログインチェックする際に呼ばれる
+        
+        Args:
+            password (str): ログイン画面で入力されたパスワード
+        
+        Returns:
+            bool: パスワードが一致した場合はTrueを返す
+        """
+        # パラメーターpasswordの値をハッシュ化して
+        # 現在のインスタンスのpassword_hashと照合した結果を返す
+        return check_password_hash(self.password_hash, password)
+
+# user_loaderはセッションに保存されているユーザーIDからユーザーオブジェクトを再読み込みする際に呼ばれるコールバックを設定する
+@login_manager.user_loader
+def load_user(user_id):
+    """ユーザーオブジェクトを再読み込みする際にコールバックされる
+    
+    Args:
+        user_id (str): ユーザーID
+    
+    Returns:
+        object: 対象のユーザーのレコード
+    """
+    # usersテーブルから指定されたuser_idのレコードを抽出
+    return db.session.get(User, user_id)
