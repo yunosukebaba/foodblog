@@ -49,3 +49,4 @@ def index():
         # ログイン画面へのアクセスは、login.htmlをレンダリングして
         # LoginFormのインスタンスformを引き渡す
         return render_template('login.html', form=form)
+    return render_template('login.html', form=form)
